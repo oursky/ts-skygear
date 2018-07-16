@@ -331,7 +331,7 @@ declare module "skygear/cloud" {
     container: CloudCodeContainer;
   }
 
-  export type OpFunc = (parms: any, options: OpOptions) => void;
+  export type OpFunc = (parms: any, options: OpOptions) => any;
 
   export interface OpRegistrationOptions {
     keyRequired?: boolean;
@@ -354,7 +354,7 @@ declare module "skygear/cloud" {
     options?: EveryOptions
   ): void;
 
-  export type EventFunc = (event: any) => Promise<any>;
+  export type EventFunc = (event: any) => void;
 
   export type EventOptions = any;
 
@@ -377,7 +377,7 @@ declare module "skygear/cloud" {
   export type handlerFunc = (
     req: handlerReq,
     options: handlerFuncOptions
-  ) => Promise<any>;
+  ) => any;
 
   export function handler(
     path: string,
@@ -408,10 +408,16 @@ declare module "skygear/cloud" {
     info(authData: AuthData): Promise<any>;
   }
 
+  import * as skygear from "skygear";
+
+  type Record = skygear.Record;
+
+  export type Pool = any;
+
   export type HookFunc = (
-    newRecord: any,
-    oldRecord: any,
-    pool: any,
+    newRecord: Record,
+    oldRecord: Record,
+    pool: Pool,
     options: any
   ) => any;
 
@@ -426,12 +432,6 @@ declare module "skygear/cloud" {
     func: HookFunc,
     options?: HookOptions
   ): void;
-
-  import * as skygear from "skygear";
-
-  type Record = skygear.Record;
-
-  export type Pool = any;
 
   export type RecordOperationFunc = (
     record: Record,
