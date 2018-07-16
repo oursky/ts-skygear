@@ -309,7 +309,7 @@ declare module "skygear" {
     PluginTimeout: 119;
     RecordQueryInvalid: 120;
     PluginInitializing: 121;
-    UnexpectedError: 1000;
+    UnexpectedError: 10000;
   }
 
   export const ErrorCodes: ErrorCodeType;
