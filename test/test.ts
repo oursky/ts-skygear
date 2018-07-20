@@ -122,3 +122,21 @@ skygearCloud.staticAsset("/styles", function() {
 });
 
 skygearCloud.configModule("moduleName", { ignoreWarning: true });
+
+const container = skygearCloud.getContainer();
+const requestData = {
+  auth_data: { email: "123@test.com" },
+  password: "12345678"
+};
+container.makeRequest("auth:signup", requestData);
+
+import skygear from "skygear";
+
+skygear
+  .lambda("user:signup", { payload: { user: "123", password: "456" } })
+  .then(response => {
+    console.log(response);
+  })
+  .catch(err => {
+    console.error(err);
+  });

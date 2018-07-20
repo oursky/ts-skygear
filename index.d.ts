@@ -121,7 +121,11 @@ declare module "skygear" {
     $type: "geo";
   }
 
-  export class Container {
+  export class BaseContainer {
+    public makeRequest(action: string, data: any): Promise<any>;
+  }
+
+  export class Container extends BaseContainer {
     public endPoint: string;
 
     public auth: AuthContainer;
@@ -321,8 +325,6 @@ declare module "skygear/cloud" {
     args: Array<any>;
   }
 
-  export type CloudCodeContainer = any;
-
   export interface OpOptions {
     context: {
       request_id: string;
@@ -480,4 +482,8 @@ declare module "skygear/cloud" {
     moduleName: string,
     options?: ConfigOptions
   ): Promise<any>;
+
+  export class CloudCodeContainer extends skygear.BaseContainer {}
+
+  export function getContainer(userId?: string): CloudCodeContainer;
 }
