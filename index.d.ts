@@ -176,6 +176,8 @@ declare module "skygear" {
       users: Record[] | string[],
       roles: Role[] | string[]
     ): Promise<"OK">;
+
+    public _authResolve(user: RecordCls): Promise<Record>;
   }
 
   export class PubsubContainer {

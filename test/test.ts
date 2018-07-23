@@ -130,7 +130,7 @@ const requestData = {
 };
 container.makeRequest("auth:signup", requestData);
 
-import skygear from "skygear";
+import skygear, { RecordCls, Record } from "skygear";
 
 skygear
   .lambda("user:signup", { payload: { user: "123", password: "456" } })
@@ -140,3 +140,9 @@ skygear
   .catch(err => {
     console.error(err);
   });
+
+const record: any = {};
+
+skygear.auth._authResolve(record).then(r => {
+  console.log(r);
+});
