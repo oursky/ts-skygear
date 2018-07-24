@@ -288,6 +288,7 @@ declare module "skygear" {
   }
 
   export class SkygearError extends Error {
+    constructor(message: string, code?: number, info?: any);
     code: ErrorCodeType[keyof ErrorCodeType];
     info: KVObject | null;
     message: string;
