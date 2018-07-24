@@ -413,9 +413,11 @@ declare module "skygear/cloud" {
     info(authData: AuthData): Promise<any>;
   }
 
-  import * as skygear from "skygear";
+  import { Record, BaseContainer } from "skygear";
 
-  type Record = skygear.Record;
+  export { SkygearError } from "skygear";
+
+  export type Record = Record;
 
   export type Pool = any;
 
@@ -486,7 +488,7 @@ declare module "skygear/cloud" {
     options?: ConfigOptions
   ): Promise<any>;
 
-  export class CloudCodeContainer extends skygear.BaseContainer {}
+  export class CloudCodeContainer extends BaseContainer {}
 
   export function getContainer(userId?: string): CloudCodeContainer;
 }
