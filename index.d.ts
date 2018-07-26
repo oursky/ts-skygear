@@ -168,6 +168,12 @@ declare module "skygear" {
       username: string,
       password: string
     ): Promise<Record>;
+
+    public loginWithEmail(
+      email: string,
+      password: string
+    ): Promise<Record>;
+
     public logout(): Promise<null>;
 
     public adminResetPassword(
