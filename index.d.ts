@@ -174,7 +174,7 @@ declare module "skygear" {
       password: string
     ): Promise<Record>;
 
-    public logout(): Promise<null>;
+    public logout(): Promise<void>;
 
     public adminResetPassword(
       user: Record | string,
