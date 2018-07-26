@@ -502,3 +502,8 @@ declare module "skygear/cloud" {
 
   export function getContainer(userId?: string): CloudCodeContainer;
 }
+
+declare module 'skygear/react-native' {
+  import Container from 'skygear';
+  export default Container;
+}
