@@ -68,6 +68,16 @@ declare module "skygear" {
     public constructor(name: string);
   }
 
+  // NOTE(louis): I do not want to copy this but
+  // in react native environment we cannot use --lib DOM
+  // so File is undefined.
+  // Therefore we have to define it here.
+  // This is copied from https://github.com/Microsoft/TypeScript/blob/master/src/lib/dom.generated.d.ts
+  interface File extends Blob {
+      readonly lastModified: number;
+      readonly name: string;
+  }
+
   export interface AssetAttrs {
     name: string;
     file?: File | Blob;
