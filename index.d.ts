@@ -119,7 +119,7 @@ declare module "skygear" {
     public latitude: string;
     public longitude: string;
 
-    public static fromJSON(attrs: { $lat: number; $lng: number }): Geolocation;
+    public static fromJSON(attrs: { $lat: number; $lng: number }): GeoLocation;
 
     constructor(latitude: string, longitude: string);
     toJSON(): GeoLocationJson;
@@ -247,7 +247,7 @@ declare module "skygear" {
 
     public distanceGreaterThan(
       key: string,
-      loc: Geolocation,
+      loc: GeoLocation,
       distance: number
     ): this;
 
@@ -263,14 +263,14 @@ declare module "skygear" {
     public addDescending(key: string): this;
     public addAscending(key: string): this;
 
-    public addDescendingByDistance(key: string, loc: Geolocation): this;
-    public addAscendingByDistance(key: string, loc: Geolocation): this;
+    public addDescendingByDistance(key: string, loc: GeoLocation): this;
+    public addAscendingByDistance(key: string, loc: GeoLocation): this;
 
     public transientInclude(key: string, mapToKey?: string): this;
     public transientIncludeDistance(
       key: string,
       mapToKey: string | undefined,
-      loc: Geolocation
+      loc: GeoLocation
     ): this;
 
     // TODO (Steven-Chan):
