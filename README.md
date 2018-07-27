@@ -14,3 +14,10 @@ In tsconfig.json of your project, add
 ``` 
 
 Then run ```yarn```
+
+# NOTE(yarn):
+
+Package installed via git URL may have stale cache problem, please add
+following line to your CI
+
+`yarn cache clean ts-skygear`
