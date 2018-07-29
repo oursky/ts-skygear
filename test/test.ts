@@ -1,3 +1,4 @@
+import skygear, { RecordCls, Record } from "skygear";
 import * as skygearCloud from "skygear/cloud";
 
 skygearCloud.op(
@@ -130,7 +131,6 @@ const requestData = {
 };
 container.makeRequest("auth:signup", requestData);
 
-import skygear, { RecordCls, Record } from "skygear";
 
 skygear
   .lambda("user:signup", { payload: { user: "123", password: "456" } })
