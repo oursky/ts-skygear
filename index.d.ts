@@ -2,9 +2,9 @@ declare module "skygear" {
   const skygear: Container;
   export default skygear;
 
-  export class Record {
+  export class Record<T extends string> {
     _id: string;
-    _type: string;
+    _type: T;
 
     // meta attrs
     createdAt: Date;
@@ -14,11 +14,11 @@ declare module "skygear" {
     updatedBy: string;
     access: ACL;
 
-    static extend(recordType: string, instFunc?: Function): RecordCls;
+    static extend<T extends string>(recordType: T, instFunc?: Function): RecordCls<T>;
 
-    constructor(recordType: string, attrs: KVObject);
+    constructor(recordType: T, attrs: KVObject);
 
-    readonly recordType: string;
+    readonly recordType: T;
     readonly id: string;
 
     readonly attributeKeys: string[];
@@ -32,24 +32,24 @@ declare module "skygear" {
     setNoAccessForRole(role: Role): void;
     setReadOnlyForRole(role: Role): void;
     setReadWriteAccessForRole(role: Role): void;
-    setNoAccessForUser(user: Record): void;
-    setReadOnlyForUser(user: Record): void;
-    setReadWriteAccessForUser(user: Record): void;
+    setNoAccessForUser(user: Record<"user">): void;
+    setReadOnlyForUser(user: Record<"user">): void;
+    setReadWriteAccessForUser(user: Record<"user">): void;
 
     hasPublicReadAccess(): boolean;
     hasPublicWriteAccess(): boolean;
     hasReadAccessForRole(role: Role): boolean;
     hasWriteAccessForRole(role: Role): boolean;
-    hasReadAccessForUser(user: Record): boolean;
-    hasWriteAccessForUser(user: Record): boolean;
+    hasReadAccessForUser(user: Record<"user">): boolean;
+    hasWriteAccessForUser(user: Record<"user">): boolean;
 
     toJSON(): KVObject;
 
     [key: string]: any;
   }
 
-  export type RecordCls = {
-    new (attrs?: KVObject): Record;
+  export type RecordCls<T extends string> = {
+    new (attrs?: KVObject): Record<T>;
   };
 
   export type KVObject = { [key: string]: any };
@@ -97,8 +97,8 @@ declare module "skygear" {
     $url: string;
   }
 
-  export class Reference {
-    constructor(attrs: Record | string);
+  export class Reference<T extends string> {
+    constructor(attrs: Record<T> | string);
 
     readonly id: string;
     toJSON(): ReferenceJson;
@@ -136,7 +136,7 @@ declare module "skygear" {
     publicDB: Database;
     pubsub: PubsubContainer;
 
-    UserRecord: RecordCls;
+    UserRecord: RecordCls<"user">;
 
     config(options: {
       apiKey: string;
@@ -153,41 +153,41 @@ declare module "skygear" {
   }
 
   export class AuthContainer {
-    currentUser: Record | undefined;
-    accessToken: string | undefined;
+    currentUser: Record<"user"> | undefined | null;
+    accessToken: string | undefined | null;
 
-    whoami(): Promise<Record>;
+    whoami(): Promise<Record<"user">>;
 
     loginWithUsername(
       username: string,
       password: string
-    ): Promise<Record>;
+    ): Promise<Record<"user">>;
 
     loginWithEmail(
       email: string,
       password: string
-    ): Promise<Record>;
+    ): Promise<Record<"user">>;
 
     logout(): Promise<void>;
 
     adminResetPassword(
-      user: Record | string,
+      user: Record<"user"> | string,
       newPassword: string
     ): Promise<string>;
 
     fetchUserRole(
-      users: Record[] | string[]
+      users: Record<"user">[] | string[]
     ): Promise<{ [id: string]: Role[] }>;
     assignUserRole(
-      users: Record[] | string[],
+      users: Record<"user">[] | string[],
       roles: Role[] | string[]
     ): Promise<"OK">;
     revokeUserRole(
-      users: Record[] | string[],
+      users: Record<"user">[] | string[],
       roles: Role[] | string[]
     ): Promise<"OK">;
 
-    _authResolve(user: RecordCls): Promise<Record>;
+    _authResolve(authResponse: any): Promise<Record<"user">>;
   }
 
   export class PubsubContainer {
@@ -195,37 +195,37 @@ declare module "skygear" {
   }
 
   export class Database {
-    getRecordByID(id: string): Promise<Record>;
+    getRecordByID<T extends string>(id: string): Promise<Record<T>>;
 
-    save(record: Record, options?: DatabaseSaveOptions): Promise<Record>;
-    save(
-      records: Record[],
+    save<T extends string>(record: Record<T>, options?: DatabaseSaveOptions): Promise<Record<T>>;
+    save<T extends string>(
+      records: Record<T>[],
       options?: DatabaseSaveOptions
-    ): Promise<DatabaseSaveBatchResult>;
+    ): Promise<DatabaseSaveBatchResult<T>>;
 
-    delete(record: Record): Promise<Record>;
-    delete(
-      records: Record[] | QueryResult<Record>
+    delete<T extends string>(record: Record<T>): Promise<Record<T>>;
+    delete<T extends string>(
+      records: Record<T>[] | QueryResult<Record<T>>
     ): Promise<(SkygearError | undefined)[] | undefined>;
 
-    query<T extends Record = Record>(
-      query: Query,
+    query<T extends string, R extends Record<T> = Record<T>>(
+      query: Query<T>,
       cacheCallback?: boolean
-    ): Promise<QueryResult<T>>;
+    ): Promise<QueryResult<R>>;
   }
 
   interface DatabaseSaveOptions {
     atomic?: Boolean;
   }
-  export interface DatabaseSaveBatchResult {
-    savedRecords: Record[];
+  export interface DatabaseSaveBatchResult<T extends string> {
+    savedRecords: Record<T>[];
     errors: Error[];
   }
 
-  export class Query {
-    constructor(recordCls: RecordCls);
+  export class Query<T extends string> {
+    constructor(recordCls: RecordCls<T>);
 
-    recordType: string;
+    recordType: T;
     overallCount: boolean;
     limit: number;
     offset: number;
@@ -280,10 +280,10 @@ declare module "skygear" {
     hash: string;
     toJSON(): KVObject;
 
-    static clone(query: Query): Query;
-    static fromJSON(payload: any): Query;
-    static or(...queries: Query[]): Query;
-    static not(query: Query): Query;
+    static clone<T extends string>(query: Query<T>): Query<T>;
+    static fromJSON<T extends string>(payload: any): Query<T>;
+    static or<T extends string>(...queries: Query<T>[]): Query<T>;
+    static not<T extends string>(query: Query<T>): Query<T>;
   }
 
   export interface QueryResult<T> extends Array<T> {
@@ -425,34 +425,13 @@ declare module "skygear/cloud" {
 
   import { Record, BaseContainer } from "skygear";
 
-  export { SkygearError } from "skygear";
-
-  export type Record = Record;
+  export { SkygearError, Record } from "skygear";
 
   export type Pool = any;
 
-  export type HookFunc = (
-    newRecord: Record,
-    oldRecord: Record,
-    pool: Pool,
-    options: any
-  ) => any;
-
-  export interface HookOptions {
-    type: string;
-    trigger: string;
-    async: boolean;
-  }
-
-  export function hook(
-    name: string,
-    func: HookFunc,
-    options?: HookOptions
-  ): void;
-
-  export type RecordOperationFunc = (
-    record: Record,
-    originalRecord: Record,
+  export type RecordOperationFunc<T extends string> = (
+    record: Record<T>,
+    originalRecord: Record<T> | null | undefined,
     pool: Pool,
     options: any
   ) => any;
@@ -461,27 +440,27 @@ declare module "skygear/cloud" {
     async: boolean;
   }
 
-  export function beforeSave(
-    recordType: string,
-    func: RecordOperationFunc,
+  export function beforeSave<T extends string>(
+    recordType: T,
+    func: RecordOperationFunc<T>,
     options?: RecordOperationOptions
   ): void;
 
-  export function afterSave(
-    recordType: string,
-    func: RecordOperationFunc,
+  export function afterSave<T extends string>(
+    recordType: T,
+    func: RecordOperationFunc<T>,
     options?: RecordOperationOptions
   ): void;
 
-  export function beforeDelete(
-    recordType: string,
-    func: RecordOperationFunc,
+  export function beforeDelete<T extends string>(
+    recordType: T,
+    func: RecordOperationFunc<T>,
     options?: RecordOperationOptions
   ): void;
 
-  export function afterDelete(
-    recordType: string,
-    func: RecordOperationFunc,
+  export function afterDelete<T extends string>(
+    recordType: T,
+    func: RecordOperationFunc<T>,
     options?: RecordOperationOptions
   ): void;
 

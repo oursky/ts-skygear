@@ -62,19 +62,13 @@ class Provider extends skygearCloud.BaseAuthProvider {
   }
 }
 
-skygearCloud.hook("before-save", function(newRecord, oldRecord, pool) {
-  console.log("Meow");
-  console.log(oldRecord.createdAt);
-  console.log(pool);
-  return newRecord;
-});
-
 skygearCloud.beforeSave(
   "note",
   function(record, original, pool, options) {
     record.attributeKeys;
-    original.createdBy;
-    return;
+    if (original != null) {
+      original.createdBy;
+    }
   },
   {
     async: true
@@ -130,19 +124,3 @@ const requestData = {
   password: "12345678"
 };
 container.makeRequest("auth:signup", requestData);
-
-
-skygear
-  .lambda("user:signup", { payload: { user: "123", password: "456" } })
-  .then(response => {
-    console.log(response);
-  })
-  .catch(err => {
-    console.error(err);
-  });
-
-const record: any = {};
-
-skygear.auth._authResolve(record).then(r => {
-  console.log(r);
-});
