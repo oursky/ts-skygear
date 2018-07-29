@@ -14,9 +14,9 @@ declare module "skygear" {
     updatedBy: string;
     access: ACL;
 
-    public static extend(recordType: string, instFunc?: Function): RecordCls;
+    static extend(recordType: string, instFunc?: Function): RecordCls;
 
-    public constructor(recordType: string, attrs: KVObject);
+    constructor(recordType: string, attrs: KVObject);
 
     readonly recordType: string;
     readonly id: string;
@@ -24,26 +24,26 @@ declare module "skygear" {
     readonly attributeKeys: string[];
     readonly $transient: KVObject;
 
-    public update(attrs: KVObject): void;
+    update(attrs: KVObject): void;
 
-    public setPublicNoAccess(): void;
-    public setPublicReadOnly(): void;
-    public setPublicReadWriteAccess(): void;
-    public setNoAccessForRole(role: Role): void;
-    public setReadOnlyForRole(role: Role): void;
-    public setReadWriteAccessForRole(role: Role): void;
-    public setNoAccessForUser(user: Record): void;
-    public setReadOnlyForUser(user: Record): void;
-    public setReadWriteAccessForUser(user: Record): void;
+    setPublicNoAccess(): void;
+    setPublicReadOnly(): void;
+    setPublicReadWriteAccess(): void;
+    setNoAccessForRole(role: Role): void;
+    setReadOnlyForRole(role: Role): void;
+    setReadWriteAccessForRole(role: Role): void;
+    setNoAccessForUser(user: Record): void;
+    setReadOnlyForUser(user: Record): void;
+    setReadWriteAccessForUser(user: Record): void;
 
-    public hasPublicReadAccess(): boolean;
-    public hasPublicWriteAccess(): boolean;
-    public hasReadAccessForRole(role: Role): boolean;
-    public hasWriteAccessForRole(role: Role): boolean;
-    public hasReadAccessForUser(user: Record): boolean;
-    public hasWriteAccessForUser(user: Record): boolean;
+    hasPublicReadAccess(): boolean;
+    hasPublicWriteAccess(): boolean;
+    hasReadAccessForRole(role: Role): boolean;
+    hasWriteAccessForRole(role: Role): boolean;
+    hasReadAccessForUser(user: Record): boolean;
+    hasWriteAccessForUser(user: Record): boolean;
 
-    public toJSON(): KVObject;
+    toJSON(): KVObject;
 
     [key: string]: any;
   }
@@ -60,7 +60,7 @@ declare module "skygear" {
 
   export class Role {
     readonly name: string;
-    public constructor(name: string);
+    constructor(name: string);
   }
 
   // NOTE(louis): I do not want to copy this but
@@ -87,9 +87,9 @@ declare module "skygear" {
     url?: string;
     base64?: string;
 
-    public constructor(attrs: AssetAttrs);
-    public static fromJSON(attrs: AssetJson): Asset;
-    public toJSON(): AssetJson;
+    constructor(attrs: AssetAttrs);
+    static fromJSON(attrs: AssetJson): Asset;
+    toJSON(): AssetJson;
   }
 
   export interface AssetJson {
@@ -102,7 +102,7 @@ declare module "skygear" {
     constructor(attrs: Record | string);
 
     readonly id: string;
-    public toJSON(): ReferenceJson;
+    toJSON(): ReferenceJson;
   }
 
   export interface ReferenceJson {
@@ -111,10 +111,10 @@ declare module "skygear" {
   }
 
   export class GeoLocation {
-    public latitude: string;
-    public longitude: string;
+    latitude: string;
+    longitude: string;
 
-    public static fromJSON(attrs: { $lat: number; $lng: number }): GeoLocation;
+    static fromJSON(attrs: { $lat: number; $lng: number }): GeoLocation;
 
     constructor(latitude: string, longitude: string);
     toJSON(): GeoLocationJson;
@@ -127,89 +127,89 @@ declare module "skygear" {
   }
 
   export class BaseContainer {
-    public makeRequest(action: string, data: any): Promise<any>;
+    makeRequest(action: string, data: any): Promise<any>;
   }
 
   export class Container extends BaseContainer {
-    public endPoint: string;
+    endPoint: string;
 
-    public auth: AuthContainer;
-    public publicDB: Database;
-    public pubsub: PubsubContainer;
+    auth: AuthContainer;
+    publicDB: Database;
+    pubsub: PubsubContainer;
 
-    public UserRecord: RecordCls;
+    UserRecord: RecordCls;
 
-    public config(options: {
+    config(options: {
       apiKey: string;
       endPoint: string;
     }): Promise<Container>;
 
-    public lambda(action: string, params: AnyValue): Promise<AnyValue>;
+    lambda(action: string, params: AnyValue): Promise<AnyValue>;
   }
 
   export class DatabaseContainer {
     constructor(container: Container);
 
-    public uploadAsset(asset: Asset): Promise<Asset>;
+    uploadAsset(asset: Asset): Promise<Asset>;
   }
 
   export class AuthContainer {
-    public currentUser: Record | undefined;
-    public accessToken: string | undefined;
+    currentUser: Record | undefined;
+    accessToken: string | undefined;
 
-    public whoami(): Promise<Record>;
+    whoami(): Promise<Record>;
 
-    public loginWithUsername(
+    loginWithUsername(
       username: string,
       password: string
     ): Promise<Record>;
 
-    public loginWithEmail(
+    loginWithEmail(
       email: string,
       password: string
     ): Promise<Record>;
 
-    public logout(): Promise<void>;
+    logout(): Promise<void>;
 
-    public adminResetPassword(
+    adminResetPassword(
       user: Record | string,
       newPassword: string
     ): Promise<string>;
 
-    public fetchUserRole(
+    fetchUserRole(
       users: Record[] | string[]
     ): Promise<{ [id: string]: Role[] }>;
-    public assignUserRole(
+    assignUserRole(
       users: Record[] | string[],
       roles: Role[] | string[]
     ): Promise<"OK">;
-    public revokeUserRole(
+    revokeUserRole(
       users: Record[] | string[],
       roles: Role[] | string[]
     ): Promise<"OK">;
 
-    public _authResolve(user: RecordCls): Promise<Record>;
+    _authResolve(user: RecordCls): Promise<Record>;
   }
 
   export class PubsubContainer {
-    public autoPubsub: boolean;
+    autoPubsub: boolean;
   }
 
   export class Database {
-    public getRecordByID(id: string): Promise<Record>;
+    getRecordByID(id: string): Promise<Record>;
 
-    public save(record: Record, options?: DatabaseSaveOptions): Promise<Record>;
-    public save(
+    save(record: Record, options?: DatabaseSaveOptions): Promise<Record>;
+    save(
       records: Record[],
       options?: DatabaseSaveOptions
     ): Promise<DatabaseSaveBatchResult>;
 
-    public delete(record: Record): Promise<Record>;
-    public delete(
+    delete(record: Record): Promise<Record>;
+    delete(
       records: Record[] | QueryResult<Record>
     ): Promise<(SkygearError | undefined)[] | undefined>;
 
-    public query<T extends Record = Record>(
+    query<T extends Record = Record>(
       query: Query,
       cacheCallback?: boolean
     ): Promise<QueryResult<T>>;
@@ -226,49 +226,49 @@ declare module "skygear" {
   export class Query {
     constructor(recordCls: RecordCls);
 
-    public recordType: string;
-    public overallCount: boolean;
-    public limit: number;
-    public offset: number;
-    public page: number;
+    recordType: string;
+    overallCount: boolean;
+    limit: number;
+    offset: number;
+    page: number;
 
-    public like(key: string, value: string): this;
-    public notLike(key: string, value: string): this;
-    public caseInsensitiveLike(key: string, value: string): this;
-    public caseInsensitiveNotLike(key: string, value: string): this;
+    like(key: string, value: string): this;
+    notLike(key: string, value: string): this;
+    caseInsensitiveLike(key: string, value: string): this;
+    caseInsensitiveNotLike(key: string, value: string): this;
 
-    public equalTo(key: string, value: AnyValue): this;
-    public notEqualTo(key: string, value: AnyValue): this;
+    equalTo(key: string, value: AnyValue): this;
+    notEqualTo(key: string, value: AnyValue): this;
 
-    public greaterThan(key: string, value: number | Date): this;
-    public greaterThanOrEqualTo(key: string, value: number | Date): this;
-    public lessThan(key: string, value: number | Date): this;
-    public lessThanOrEqualTo(key: string, value: number | Date): this;
-    public greaterThanOrEqualTo(key: string, value: number | Date): this;
+    greaterThan(key: string, value: number | Date): this;
+    greaterThanOrEqualTo(key: string, value: number | Date): this;
+    lessThan(key: string, value: number | Date): this;
+    lessThanOrEqualTo(key: string, value: number | Date): this;
+    greaterThanOrEqualTo(key: string, value: number | Date): this;
 
-    public distanceGreaterThan(
+    distanceGreaterThan(
       key: string,
       loc: GeoLocation,
       distance: number
     ): this;
 
-    public contains(key: string, lookupArray: AnyValue[]): this;
-    public notContains(key: string, lookupArray: AnyValue[]): this;
+    contains(key: string, lookupArray: AnyValue[]): this;
+    notContains(key: string, lookupArray: AnyValue[]): this;
 
-    public containsValue(key: string, needle: string): this;
-    public notContainsValue(key: string, needle: string): this;
+    containsValue(key: string, needle: string): this;
+    notContainsValue(key: string, needle: string): this;
 
     // havingRelation(key, rel)
     // notHavingRelation(key, rel)
 
-    public addDescending(key: string): this;
-    public addAscending(key: string): this;
+    addDescending(key: string): this;
+    addAscending(key: string): this;
 
-    public addDescendingByDistance(key: string, loc: GeoLocation): this;
-    public addAscendingByDistance(key: string, loc: GeoLocation): this;
+    addDescendingByDistance(key: string, loc: GeoLocation): this;
+    addAscendingByDistance(key: string, loc: GeoLocation): this;
 
-    public transientInclude(key: string, mapToKey?: string): this;
-    public transientIncludeDistance(
+    transientInclude(key: string, mapToKey?: string): this;
+    transientIncludeDistance(
       key: string,
       mapToKey: string | undefined,
       loc: GeoLocation
@@ -278,8 +278,8 @@ declare module "skygear" {
     // Define type Predicate
     readonly predicate: any[];
 
-    public hash: string;
-    public toJSON(): KVObject;
+    hash: string;
+    toJSON(): KVObject;
 
     static clone(query: Query): Query;
     static fromJSON(payload: any): Query;
