@@ -6,5 +6,8 @@
   "files": ["index.d.ts"],
   "devDependencies": {
     "typescript": "2.9.2"
+  },
+  "scripts": {
+    "test": "tsc --noEmit"
   }
 }
