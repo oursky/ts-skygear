@@ -52,7 +52,6 @@ declare module "skygear" {
     new (attrs?: KVObject): Record;
   };
 
-  export type AnyValue = any;
   export type KVObject = { [key: string]: any };
 
   // TODO: write better definition
@@ -144,7 +143,7 @@ declare module "skygear" {
       endPoint: string;
     }): Promise<Container>;
 
-    lambda(action: string, params: AnyValue): Promise<AnyValue>;
+    lambda(action: string, params: any): Promise<any>;
   }
 
   export class DatabaseContainer {
@@ -237,8 +236,8 @@ declare module "skygear" {
     caseInsensitiveLike(key: string, value: string): this;
     caseInsensitiveNotLike(key: string, value: string): this;
 
-    equalTo(key: string, value: AnyValue): this;
-    notEqualTo(key: string, value: AnyValue): this;
+    equalTo(key: string, value: any): this;
+    notEqualTo(key: string, value: any): this;
 
     greaterThan(key: string, value: number | Date): this;
     greaterThanOrEqualTo(key: string, value: number | Date): this;
@@ -252,8 +251,8 @@ declare module "skygear" {
       distance: number
     ): this;
 
-    contains(key: string, lookupArray: AnyValue[]): this;
-    notContains(key: string, lookupArray: AnyValue[]): this;
+    contains(key: string, lookupArray: any[]): this;
+    notContains(key: string, lookupArray: any[]): this;
 
     containsValue(key: string, needle: string): this;
     notContainsValue(key: string, needle: string): this;
