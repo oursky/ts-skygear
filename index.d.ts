@@ -1,11 +1,7 @@
-// Type definitions for Skygear 1.1.0
-
 declare module "skygear" {
-  // tslint:disable-next-line: no-any
   const skygear: Container;
   export default skygear;
 
-  // tslint:disable-next-line: no-any
   export class Record {
     _id: string;
     _type: string;
@@ -56,7 +52,6 @@ declare module "skygear" {
     new (attrs?: KVObject): Record;
   };
 
-  // tslint:disable-next-line: no-any
   export type AnyValue = any;
   export type KVObject = { [key: string]: any };
 
