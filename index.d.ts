@@ -174,6 +174,12 @@ declare module "skygear" {
       user: Record | string,
       newPassword: string
     ): Promise<string>;
+    adminEnableUser(user: Record | string): Promise<string>;
+    adminDisableUser(
+      user: Record | string,
+      message: string,
+      expiry?: Date
+    ): Promise<string>;
 
     fetchUserRole(
       users: Record[] | string[]
