@@ -429,7 +429,7 @@ declare module "skygear/cloud" {
     info(authData: AuthData): Promise<any>;
   }
 
-  import { Record, BaseContainer } from "skygear";
+  import { Record, BaseContainer, AuthContainer, Database, PubsubContainer } from "skygear";
 
   export { SkygearError } from "skygear";
 
@@ -504,7 +504,12 @@ declare module "skygear/cloud" {
     options?: ConfigOptions
   ): Promise<any>;
 
-  export class CloudCodeContainer extends BaseContainer {}
+  export class CloudCodeContainer extends BaseContainer {
+    asUserId: string;
+    auth: AuthContainer;
+    publicDB: Database;
+    pubsub: PubsubContainer;
+  }
 
   export function getContainer(userId?: string): CloudCodeContainer;
 }
