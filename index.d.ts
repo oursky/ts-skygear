@@ -68,8 +68,8 @@ declare module "skygear" {
   // Therefore we have to define it here.
   // This is copied from https://github.com/Microsoft/TypeScript/blob/master/src/lib/dom.generated.d.ts
   interface File extends Blob {
-      readonly lastModified: number;
-      readonly name: string;
+    readonly lastModified: number;
+    readonly name: string;
   }
 
   export interface AssetAttrs {
@@ -138,10 +138,7 @@ declare module "skygear" {
 
     UserRecord: RecordCls;
 
-    config(options: {
-      apiKey: string;
-      endPoint: string;
-    }): Promise<Container>;
+    config(options: { apiKey: string; endPoint: string }): Promise<Container>;
 
     lambda(action: string, params: any): Promise<any>;
   }
@@ -152,48 +149,145 @@ declare module "skygear" {
     uploadAsset(asset: Asset): Promise<Asset>;
   }
 
+  export interface LinkOAuthProviderOption {
+    callbackURL: string;
+    scope: string[];
+    options: any;
+  }
+
   export class AuthContainer {
     currentUser: Record | undefined;
     accessToken: string | undefined;
 
-    whoami(): Promise<Record>;
-
-    loginWithUsername(
-      username: string,
-      password: string
-    ): Promise<Record>;
-
-    loginWithEmail(
-      email: string,
-      password: string
-    ): Promise<Record>;
-
-    logout(): Promise<void>;
-
-    adminResetPassword(
-      user: Record | string,
-      newPassword: string
-    ): Promise<string>;
-    adminEnableUser(user: Record | string): Promise<string>;
     adminDisableUser(
       user: Record | string,
       message: string,
       expiry?: Date
     ): Promise<string>;
 
-    fetchUserRole(
-      users: Record[] | string[]
-    ): Promise<{ [id: string]: Role[] }>;
+    adminEnableUser(user: Record | string): Promise<string>;
+
+    adminResetPassword(
+      user: Record | string,
+      newPassword: string
+    ): Promise<string>;
+
     assignUserRole(
       users: Record[] | string[],
       roles: Role[] | string[]
     ): Promise<"OK">;
+
+    authHandler(): Promise<any>;
+
+    changePassword(
+      oldPassword: string,
+      newPassword: string,
+      invalidate: boolean
+    ): Promise<Record>;
+
+    fetchUserRole(
+      users: Record[] | string[]
+    ): Promise<{ [id: string]: Role[] }>;
+
+    forgotPassword(email: String): Promise<any>;
+
+    getLinkRedirectResult(): Promise<any>;
+
+    getLoginRedirectResult(): Promise<any>;
+
+    getOAuthProviderProfiles(): Promise<any>;
+
+    iframeHandler(): Promise<any>;
+
+    linkOAuthProviderWithAccessToken(
+      provider: string,
+      accessToken: string
+    ): Promise<any>;
+
+    linkOAuthProviderWithPopup(
+      provider: string,
+      options: LinkOAuthProviderOption
+    ): Promise<any>;
+
+    linkOAuthProviderWithRedirect(
+      provider: string,
+      options: LinkOAuthProviderOption
+    ): Promise<any>;
+
+    login(authData: any, password: string): Promise<Record>;
+
+    loginOAuthProviderWithAccessToken(
+      provider: string,
+      accessToken: string
+    ): Promise<Record>;
+
+    loginOAuthProviderWithPopup(
+      provider: string,
+      options: LinkOAuthProviderOption
+    ): Promise<Record>;
+
+    loginOAuthProviderWithRedirect(
+      provider: string,
+      options: LinkOAuthProviderOption
+    ): Promise<Record>;
+
+    loginWithCustomToken(token: string): Promise<Record>;
+
+    loginWithEmail(email: string, password: string): Promise<Record>;
+
+    loginWithProvider(provider: string, authData: any): Promise<Record>;
+
+    loginWithUsername(username: string, password: string): Promise<Record>;
+
+    logout(): Promise<void>;
+
+    onUserChanged(listener: () => void): EventHandle;
+
+    requestVerification(recordKey: string): Promise<any>;
+
+    resetPassword(
+      userID: string,
+      code: string,
+      expireAt: number,
+      newPassword: string
+    ): Promise<any>;
+
     revokeUserRole(
       users: Record[] | string[],
       roles: Role[] | string[]
-    ): Promise<"OK">;
+    ): Promise<string[]>;
+
+    setAdminRole(roles: Role[]): Promise<string[]>;
+
+    setDefaultRole(roles: Role[]): Promise<string[]>;
+
+    signup(authData: any, password: string, data: any): Promise<Record>;
+
+    signupAnonymously(): Promise<Record>;
+
+    signupWithEmail(
+      email: string,
+      password: string,
+      data: any
+    ): Promise<Record>;
+
+    signupWithUsername(
+      username: string,
+      password: string,
+      data: any
+    ): Promise<Record>;
+
+    unlinkOAuthProvider(provider: string): Promise<any>;
+
+    verifyUserWithCode(code: string): Promise<any>;
+
+    whoami(): Promise<Record>;
 
     _authResolve(user: RecordCls): Promise<Record>;
+  }
+
+  export class EventHandle {
+    cancel(): void;
   }
 
   export class PubsubContainer {
@@ -251,11 +345,7 @@ declare module "skygear" {
     lessThanOrEqualTo(key: string, value: number | Date): this;
     greaterThanOrEqualTo(key: string, value: number | Date): this;
 
-    distanceGreaterThan(
-      key: string,
-      loc: GeoLocation,
-      distance: number
-    ): this;
+    distanceGreaterThan(key: string, loc: GeoLocation, distance: number): this;
 
     contains(key: string, lookupArray: any[]): this;
     notContains(key: string, lookupArray: any[]): this;
@@ -437,7 +527,13 @@ declare module "skygear/cloud" {
     info(authData: AuthData): Promise<any>;
   }
 
-  import { Record, BaseContainer, AuthContainer, Database, PubsubContainer } from "skygear";
+  import {
+    Record,
+    BaseContainer,
+    AuthContainer,
+    Database,
+    PubsubContainer
+  } from "skygear";
 
   export { SkygearError } from "skygear";
 
@@ -522,7 +618,7 @@ declare module "skygear/cloud" {
   export function getContainer(userId?: string): CloudCodeContainer;
 }
 
-declare module 'skygear/react-native' {
-  import Container from 'skygear';
+declare module "skygear/react-native" {
+  import Container from "skygear";
   export default Container;
 }
