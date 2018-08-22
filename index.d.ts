@@ -1,4 +1,4 @@
-declare module "skygear" {
+declare module 'skygear' {
   const skygear: Container;
   export default skygear;
 
@@ -52,7 +52,7 @@ declare module "skygear" {
     new (attrs?: KVObject): Record;
   };
 
-  export type KVObject = { [key: string]: any };
+  export type KVObject = {[key: string]: any};
 
   // TODO: write better definition
   export class ACL {}
@@ -68,8 +68,8 @@ declare module "skygear" {
   // Therefore we have to define it here.
   // This is copied from https://github.com/Microsoft/TypeScript/blob/master/src/lib/dom.generated.d.ts
   interface File extends Blob {
-      readonly lastModified: number;
-      readonly name: string;
+    readonly lastModified: number;
+    readonly name: string;
   }
 
   export interface AssetAttrs {
@@ -92,7 +92,7 @@ declare module "skygear" {
   }
 
   export interface AssetJson {
-    $type: "asset";
+    $type: 'asset';
     $name: string;
     $url: string;
   }
@@ -106,14 +106,14 @@ declare module "skygear" {
 
   export interface ReferenceJson {
     $id: string;
-    $type: "ref";
+    $type: 'ref';
   }
 
   export class GeoLocation {
     latitude: string;
     longitude: string;
 
-    static fromJSON(attrs: { $lat: number; $lng: number }): GeoLocation;
+    static fromJSON(attrs: {$lat: number; $lng: number}): GeoLocation;
 
     constructor(latitude: string, longitude: string);
     toJSON(): GeoLocationJson;
@@ -122,7 +122,7 @@ declare module "skygear" {
   export interface GeoLocationJson {
     $lat: number;
     $lng: number;
-    $type: "geo";
+    $type: 'geo';
   }
 
   export class BaseContainer {
@@ -138,10 +138,7 @@ declare module "skygear" {
 
     UserRecord: RecordCls;
 
-    config(options: {
-      apiKey: string;
-      endPoint: string;
-    }): Promise<Container>;
+    config(options: {apiKey: string; endPoint: string}): Promise<Container>;
 
     lambda(action: string, params: any): Promise<any>;
   }
@@ -152,48 +149,143 @@ declare module "skygear" {
     uploadAsset(asset: Asset): Promise<Asset>;
   }
 
+  export interface LinkOAuthProviderOption {
+    callbackURL: string;
+    scope: string[];
+    options: any;
+  }
+
   export class AuthContainer {
     currentUser: Record | undefined;
     accessToken: string | undefined;
 
-    whoami(): Promise<Record>;
-
-    loginWithUsername(
-      username: string,
-      password: string
-    ): Promise<Record>;
-
-    loginWithEmail(
-      email: string,
-      password: string
-    ): Promise<Record>;
-
-    logout(): Promise<void>;
-
-    adminResetPassword(
-      user: Record | string,
-      newPassword: string
-    ): Promise<string>;
-    adminEnableUser(user: Record | string): Promise<string>;
     adminDisableUser(
       user: Record | string,
       message: string,
-      expiry?: Date
+      expiry?: Date,
     ): Promise<string>;
 
-    fetchUserRole(
-      users: Record[] | string[]
-    ): Promise<{ [id: string]: Role[] }>;
+    adminEnableUser(user: Record | string): Promise<string>;
+
+    adminResetPassword(
+      user: Record | string,
+      newPassword: string,
+    ): Promise<string>;
+
     assignUserRole(
       users: Record[] | string[],
-      roles: Role[] | string[]
-    ): Promise<"OK">;
+      roles: Role[] | string[],
+    ): Promise<'OK'>;
+
+    authHandler(): Promise<any>;
+
+    changePassword(
+      oldPassword: string,
+      newPassword: string,
+      invalidate: boolean,
+    ): Promise<Record>;
+
+    fetchUserRole(users: Record[] | string[]): Promise<{[id: string]: Role[]}>;
+
+    forgotPassword(email: String): Promise<any>;
+
+    getLinkRedirectResult(): Promise<any>;
+
+    getLoginRedirectResult(): Promise<any>;
+
+    getOAuthProviderProfiles(): Promise<any>;
+
+    iframeHandler(): Promise<any>;
+
+    linkOAuthProviderWithAccessToken(
+      provider: string,
+      accessToken: string,
+    ): Promise<any>;
+
+    linkOAuthProviderWithPopup(
+      provider: string,
+      options: LinkOAuthProviderOption,
+    ): Promise<any>;
+
+    linkOAuthProviderWithRedirect(
+      provider: string,
+      options: LinkOAuthProviderOption,
+    ): Promise<any>;
+
+    login(authData: any, password: string): Promise<Record>;
+
+    loginOAuthProviderWithAccessToken(
+      provider: string,
+      accessToken: string,
+    ): Promise<Record>;
+
+    loginOAuthProviderWithPopup(
+      provider: string,
+      options: LinkOAuthProviderOption,
+    ): Promise<Record>;
+
+    loginOAuthProviderWithRedirect(
+      provider: string,
+      options: LinkOAuthProviderOption,
+    ): Promise<Record>;
+
+    loginWithCustomToken(token: string): Promise<Record>;
+
+    loginWithEmail(email: string, password: string): Promise<Record>;
+
+    loginWithProvider(provider: string, authData: any): Promise<Record>;
+
+    loginWithUsername(username: string, password: string): Promise<Record>;
+
+    logout(): Promise<void>;
+
+    onUserChanged(listener: () => void): EventHandle;
+
+    requestVerification(recordKey: string): Promise<any>;
+
+    resetPassword(
+      userID: string,
+      code: string,
+      expireAt: number,
+      newPassword: string,
+    ): Promise<any>;
+
     revokeUserRole(
       users: Record[] | string[],
-      roles: Role[] | string[]
-    ): Promise<"OK">;
+      roles: Role[] | string[],
+    ): Promise<string[]>;
+
+    setAdminRole(roles: Role[]): Promise<string[]>;
+
+    setDefaultRole(roles: Role[]): Promise<string[]>;
+
+    signup(authData: any, password: string, data: any): Promise<Record>;
+
+    signupAnonymously(): Promise<Record>;
+
+    signupWithEmail(
+      email: string,
+      password: string,
+      data: any,
+    ): Promise<Record>;
+
+    signupWithUsername(
+      username: string,
+      password: string,
+      data: any,
+    ): Promise<Record>;
+
+    unlinkOAuthProvider(provider: string): Promise<any>;
+
+    verifyUserWithCode(code: string): Promise<any>;
+
+    whoami(): Promise<Record>;
 
     _authResolve(user: RecordCls): Promise<Record>;
+  }
+
+  export class EventHandle {
+    cancel(): void;
   }
 
   export class PubsubContainer {
@@ -206,17 +298,17 @@ declare module "skygear" {
     save(record: Record, options?: DatabaseSaveOptions): Promise<Record>;
     save(
       records: Record[],
-      options?: DatabaseSaveOptions
+      options?: DatabaseSaveOptions,
     ): Promise<DatabaseSaveBatchResult>;
 
     delete(record: Record): Promise<Record>;
     delete(
-      records: Record[] | QueryResult<Record>
+      records: Record[] | QueryResult<Record>,
     ): Promise<(SkygearError | undefined)[] | undefined>;
 
     query<T extends Record = Record>(
       query: Query,
-      cacheCallback?: boolean
+      cacheCallback?: boolean,
     ): Promise<QueryResult<T>>;
   }
 
@@ -251,11 +343,7 @@ declare module "skygear" {
     lessThanOrEqualTo(key: string, value: number | Date): this;
     greaterThanOrEqualTo(key: string, value: number | Date): this;
 
-    distanceGreaterThan(
-      key: string,
-      loc: GeoLocation,
-      distance: number
-    ): this;
+    distanceGreaterThan(key: string, loc: GeoLocation, distance: number): this;
 
     contains(key: string, lookupArray: any[]): this;
     notContains(key: string, lookupArray: any[]): this;
@@ -276,7 +364,7 @@ declare module "skygear" {
     transientIncludeDistance(
       key: string,
       mapToKey: string | undefined,
-      loc: GeoLocation
+      loc: GeoLocation,
     ): this;
 
     // TODO (Steven-Chan):
@@ -346,7 +434,7 @@ declare module "skygear" {
   export const ErrorCodes: ErrorCodeType;
 }
 
-declare module "skygear/cloud" {
+declare module 'skygear/cloud' {
   export interface OpParams {
     action: string;
     args: Array<any>;
@@ -370,7 +458,7 @@ declare module "skygear/cloud" {
   export function op(
     name: string,
     func: OpFunc,
-    options?: OpRegistrationOptions
+    options?: OpRegistrationOptions,
   ): void;
 
   export type EveryFunc = () => void;
@@ -380,7 +468,7 @@ declare module "skygear/cloud" {
   export function every(
     cron: string,
     func: EveryFunc,
-    options?: EveryOptions
+    options?: EveryOptions,
   ): void;
 
   export type EventFunc = (event: any) => void;
@@ -390,7 +478,7 @@ declare module "skygear/cloud" {
   export function event(
     name: string,
     func: EventFunc,
-    options?: EventOptions
+    options?: EventOptions,
   ): void;
 
   export interface handlerOptions {
@@ -405,13 +493,13 @@ declare module "skygear/cloud" {
 
   export type handlerFunc = (
     req: handlerReq,
-    options: handlerFuncOptions
+    options: handlerFuncOptions,
   ) => any;
 
   export function handler(
     path: string,
     func: handlerFunc,
-    options?: handlerOptions
+    options?: handlerOptions,
   ): void;
 
   export type ProviderCls = Function;
@@ -422,7 +510,7 @@ declare module "skygear/cloud" {
     providerType: string,
     providerID: string,
     providerCls: ProviderCls,
-    options?: ProviderOptions
+    options?: ProviderOptions,
   ): void;
 
   export type AuthData = any;
@@ -437,9 +525,15 @@ declare module "skygear/cloud" {
     info(authData: AuthData): Promise<any>;
   }
 
-  import { Record, BaseContainer, AuthContainer, Database, PubsubContainer } from "skygear";
+  import {
+    Record,
+    BaseContainer,
+    AuthContainer,
+    Database,
+    PubsubContainer,
+  } from 'skygear';
 
-  export { SkygearError } from "skygear";
+  export {SkygearError} from 'skygear';
 
   export type Record = Record;
 
@@ -449,7 +543,7 @@ declare module "skygear/cloud" {
     newRecord: Record,
     oldRecord: Record,
     pool: Pool,
-    options: any
+    options: any,
   ) => any;
 
   export interface HookOptions {
@@ -461,14 +555,14 @@ declare module "skygear/cloud" {
   export function hook(
     name: string,
     func: HookFunc,
-    options?: HookOptions
+    options?: HookOptions,
   ): void;
 
   export type RecordOperationFunc = (
     record: Record,
     originalRecord: Record,
     pool: Pool,
-    options: any
+    options: any,
   ) => any;
 
   export interface RecordOperationOptions {
@@ -478,25 +572,25 @@ declare module "skygear/cloud" {
   export function beforeSave(
     recordType: string,
     func: RecordOperationFunc,
-    options?: RecordOperationOptions
+    options?: RecordOperationOptions,
   ): void;
 
   export function afterSave(
     recordType: string,
     func: RecordOperationFunc,
-    options?: RecordOperationOptions
+    options?: RecordOperationOptions,
   ): void;
 
   export function beforeDelete(
     recordType: string,
     func: RecordOperationFunc,
-    options?: RecordOperationOptions
+    options?: RecordOperationOptions,
   ): void;
 
   export function afterDelete(
     recordType: string,
     func: RecordOperationFunc,
-    options?: RecordOperationOptions
+    options?: RecordOperationOptions,
   ): void;
 
   export type StaticAssetFunc = () => string;
@@ -509,7 +603,7 @@ declare module "skygear/cloud" {
 
   export function configModule(
     moduleName: string,
-    options?: ConfigOptions
+    options?: ConfigOptions,
   ): Promise<any>;
 
   export class CloudCodeContainer extends BaseContainer {
