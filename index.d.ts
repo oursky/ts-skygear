@@ -332,6 +332,14 @@ declare module "skygear" {
     PluginTimeout: 119;
     RecordQueryInvalid: 120;
     PluginInitializing: 121;
+    ResponseTimeout: 122;
+    DeniedArgument: 123;
+    RecordQueryDenied: 124;
+    NotConfigured: 125;
+    PasswordPolicyViolated: 126;
+    UserDisabled: 127;
+    VerificationRequired: 128;
+    AssetSizeTooLarge: 129;
     UnexpectedError: 10000;
   }
 
