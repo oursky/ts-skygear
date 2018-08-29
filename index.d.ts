@@ -136,7 +136,26 @@ declare module "skygear" {
     publicDB: Database;
     pubsub: PubsubContainer;
 
+    Query: typeof Query;
+    Role: typeof Role;
+    ACL: typeof ACL;
+    Record: typeof Record;
     UserRecord: RecordCls;
+    // Sequence: typeof Sequence;
+    Asset: typeof Asset;
+    Reference: typeof Reference;
+    // Geolocation: Geolocation;
+    Database: typeof Database;
+    // Friend: typeof Friend;
+    // Follower: typeof Follower;
+    // Following: typeof Following;
+    Error: typeof SkygearError;
+    ErrorCodes: ErrorCodeType;
+    AuthContainer: typeof AuthContainer;
+    // RelationContainer: typeof RelationContainer;
+    DatabaseContainer: typeof DatabaseContainer;
+    PubsubContainer: typeof PubsubContainer;
+    // PushContainer: typeof PushContainer;
 
     config(options: { apiKey: string; endPoint: string }): Promise<Container>;
 
