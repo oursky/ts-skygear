@@ -1,5 +1,6 @@
 import skygear, { RecordCls, Record } from "skygear";
 import * as skygearCloud from "skygear/cloud";
+import { getSigner } from "skygear-core/dist/cloud/asset";
 
 skygearCloud.op(
   "greeting",
@@ -145,4 +146,8 @@ const record: any = {};
 
 skygear.auth._authResolve(record).then(r => {
   console.log(r);
+});
+
+getSigner().sign("asset_id").then(url => {
+  console.log(url);
 });

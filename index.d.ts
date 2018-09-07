@@ -641,3 +641,10 @@ declare module "skygear/react-native" {
   import Container from "skygear";
   export default Container;
 }
+
+declare module "skygear-core/dist/cloud/asset" {
+  export interface Signer {
+    sign: (name: string) => Promise<string>;
+  }
+  export function getSigner(): Signer;
+}
