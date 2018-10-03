@@ -648,3 +648,96 @@ declare module "skygear-core/dist/cloud/asset" {
   }
   export function getSigner(): Signer;
 }
+
+declare module "skygear-chat" {
+  const skygearChatContainer: SkygearChatContainer;
+
+  import { Record, Asset } from "skygear";
+
+  interface ConversationOptions {
+    distinctByParticipants?: boolean;
+    admins?: string[];
+  }
+
+  export class SkygearChatContainer {
+    createConversation(
+      participants: Record[],
+      title?: string,
+      meta?: JSON,
+      options?: ConversationOptions
+    ): Promise<Record>;
+    createDirectConversation(
+      user: Record,
+      title?: string,
+      meta?: JSON,
+      options?: ConversationOptions
+    ): Promise<Record>;
+    getConversation(
+      conversationID: string,
+      includeLastMessage?: boolean
+    ): Promise<Record>;
+    getConversations(page?: number, pageSize?: number): Promise<Record[]>;
+    getUserConversation(conversation: Record): Promise<Record>;
+    updateConversation(
+      conversation: Record,
+      title?: string,
+      meta?: JSON
+    ): Promise<Record>;
+    leaveConversation(conversation: Record): Promise<boolean>;
+    deleteConversation(conversation: Record): Promise<boolean>;
+
+    addParticipants(
+      conversation: Record,
+      participants: Record[]
+    ): Promise<Record>;
+    removeParticipants(
+      conversation: Record,
+      participants: Record[]
+    ): Promise<Record>;
+
+    addAdmins(conversation: Record, addAdmins: Record[]): Promise<Record>;
+    removeAdmins(conversation: Record, addAdmins: Record[]): Promise<Record>;
+
+    createMessage(
+      conversation: Record,
+      body: string,
+      metadata?: JSON,
+      asset?: Asset
+    ): Promise<Record>;
+    editMessage(
+      message: Record,
+      body: string,
+      metadata?: JSON,
+      asset?: Asset
+    ): Promise<Record>;
+    deleteMessage(message: Record): Promise<Record>;
+    getUnreadCount(): Promise<Object>;
+    getMessages(
+      conversation: Record,
+      limit?: number,
+      beforeTime?: Date,
+      order?: string
+    ): Promise<Record[]>;
+    getMessageReceipts(message: Record): Promise<Record>;
+
+    markAsDelivered(message: Record[]): Promise<boolean>;
+    markAsRead(message: Record[]): Promise<boolean>;
+    markAsLastMessageRead(
+      conversation: Record,
+      message: Record
+    ): Promise<number>;
+
+    getUnreadMessageCount(conversation: Record): Promise<number>;
+
+    subscribeTypingIndicator(conversation: Record, callback: () => void): void;
+    subscribeAllTypingIndicator(callback: () => void): void;
+    unsubscribeTypingIndicator(
+      conversation: Record,
+      handler?: () => void
+    ): void;
+    subscribe(handler: () => void): void;
+    unsubscribe(handler: () => void): void;
+  }
+
+  export default skygearChatContainer;
+}
