@@ -711,14 +711,14 @@ declare module "skygear-chat" {
       asset?: Asset
     ): Promise<Record>;
     deleteMessage(message: Record): Promise<Record>;
-    getUnreadCount(): Promise<Object>;
+    getUnreadCount(): Promise<{ message: number; conversation: number }>;
     getMessages(
       conversation: Record,
       limit?: number,
       beforeTime?: Date,
       order?: string
     ): Promise<Record[]>;
-    getMessageReceipts(message: Record): Promise<Record>;
+    getMessageReceipts(message: Record): Promise<Record[]>;
 
     markAsDelivered(message: Record[]): Promise<boolean>;
     markAsRead(message: Record[]): Promise<boolean>;
