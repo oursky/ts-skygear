@@ -135,6 +135,7 @@ declare module "skygear" {
     auth: AuthContainer;
     publicDB: Database;
     pubsub: PubsubContainer;
+    push: PushContainer;
 
     Query: typeof Query;
     Role: typeof Role;
@@ -155,7 +156,7 @@ declare module "skygear" {
     // RelationContainer: typeof RelationContainer;
     DatabaseContainer: typeof DatabaseContainer;
     PubsubContainer: typeof PubsubContainer;
-    // PushContainer: typeof PushContainer;
+    PushContainer: typeof PushContainer;
 
     config(options: { apiKey: string; endPoint: string }): Promise<Container>;
 
@@ -311,6 +312,30 @@ declare module "skygear" {
 
   export class PubsubContainer {
     autoPubsub: boolean;
+  }
+
+  /**
+   * You can register your device for receiving push notifications.
+   *
+   * @param {string} token - the device token
+   * @param {string} type - the device type (either 'ios' or 'android')
+   * @param {string} topic - the device topic, refer to application bundle
+   * identifier on iOS and application package name on Android
+   **/
+  export class PushContainer {
+    registerDevice(token: string, type: string, topic: string): Promise<string>;
+    unregisterDevice(): Promise<string>;
+    sendToUser(
+      users: string[],
+      notification: KVObject,
+      topic: string
+    ): Promise<KVObject>;
+
+    sendToDevice(
+      devices: string[],
+      notification: KVObject,
+      topic: string
+    ): Promise<KVObject>;
   }
 
   export class Database {
