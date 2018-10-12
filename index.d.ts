@@ -323,19 +323,19 @@ declare module "skygear" {
    * identifier on iOS and application package name on Android
    **/
   export class PushContainer {
-    registerDevice(token: string, type: string, topic: string): Promise<string>;
-    unregisterDevice(): Promise<string>;
+    registerDevice(token: string, type: string, topic: string): Promise<void>;
+    unregisterDevice(): Promise<void>;
     sendToUser(
-      users: string[],
+      users: string | string[],
       notification: KVObject,
-      topic: string
-    ): Promise<KVObject>;
+      topic?: string
+    ): Promise<void>;
 
     sendToDevice(
-      devices: string[],
+      devices: string | string[],
       notification: KVObject,
-      topic: string
-    ): Promise<KVObject>;
+      topic?: string
+    ): Promise<void>;
   }
 
   export class Database {
