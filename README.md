@@ -11,5 +11,5 @@ npm install --save-dev --save-exact @oursky/ts-skygear
 
 In `tsconfig.json` of your project, add
 ```
-"files": ["node_modules/ts-skygear/index.d.ts"]
+"files": ["node_modules/@oursky/ts-skygear/index.d.ts"]
 ```
