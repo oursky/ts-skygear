@@ -312,6 +312,14 @@ declare module "skygear" {
 
   export class PubsubContainer {
     autoPubsub: boolean;
+    on(channel: string, handler: (data: any) => void): void;
+    off(channel: string, handler?: (data: any) => void): void;
+    once(channel: string): Promise<any>;
+    onOpen(handler: (data: any) => void): void;
+    onClose(handler: (data: any) => void): void;
+    publish(channel: string, data: any): void;
+    hasHandlers(channel: string): boolean;
+    reconfigure(): void;
   }
 
   /**
@@ -660,6 +668,11 @@ declare module "skygear/cloud" {
   }
 
   export function getContainer(userId?: string): CloudCodeContainer;
+
+  export function publishEventsToChannels(
+    channels: string[],
+    eventsData: any[]
+  ): Promise<void>;
 }
 
 declare module "skygear/react-native" {
