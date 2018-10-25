@@ -697,6 +697,12 @@ declare module "skygear-chat" {
     admins?: string[];
   }
 
+  export interface SkygearChatSubscribeHandlerData {
+    record_type: string;
+    event_type: string;
+    record: Record;
+  }
+
   export class SkygearChatContainer {
     createConversation(
       participants: Record[],
@@ -773,8 +779,8 @@ declare module "skygear-chat" {
       conversation: Record,
       handler?: () => void
     ): void;
-    subscribe(handler: () => void): void;
-    unsubscribe(handler: () => void): void;
+    subscribe(handler: (data: SkygearChatSubscribeHandlerData) => void): void;
+    unsubscribe(handler: (data: SkygearChatSubscribeHandlerData) => void): void;
   }
 
   export default skygearChatContainer;
