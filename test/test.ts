@@ -42,6 +42,16 @@ skygearCloud.handler(
   }
 );
 
+skygearCloud.handler("skygearResponse", function() {
+  return new skygearCloud.SkygearResponse({
+    statusCode: 404,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: '{"a": "b"}'
+  });
+});
+
 class ProviderCls {}
 skygearCloud.provides("auth", "com.facebook", ProviderCls);
 
@@ -132,7 +142,6 @@ const requestData = {
 };
 container.makeRequest("auth:signup", requestData);
 
-
 skygear
   .lambda("user:signup", { payload: { user: "123", password: "456" } })
   .then(response => {
@@ -148,6 +157,8 @@ skygear.auth._authResolve(record).then(r => {
   console.log(r);
 });
 
-getSigner().sign("asset_id").then(url => {
-  console.log(url);
-});
+getSigner()
+  .sign("asset_id")
+  .then(url => {
+    console.log(url);
+  });

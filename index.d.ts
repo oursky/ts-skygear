@@ -556,6 +556,31 @@ declare module "skygear/cloud" {
     options?: handlerOptions
   ): void;
 
+  export class SkygearResponse {
+    constructor(options: SkygearResponse.Options);
+
+    setHeader(name: string, value: string): void;
+    getHeader(name: string): string | undefined;
+    removeHeader(name: string): void;
+
+    write(chunk: string): void;
+
+    toResultJSON(): { [key: string]: any };
+  }
+  namespace SkygearResponse {
+    interface Options {
+      headers?: { [key: string]: string };
+      statusCode?: number;
+      body?: string;
+    }
+
+    interface ResultJSON {
+      header: { [key: string]: string };
+      status: number;
+      body: string;
+    }
+  }
+
   export type ProviderCls = Function;
 
   export type ProviderOptions = any;
