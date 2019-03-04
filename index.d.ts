@@ -62,6 +62,15 @@ declare module "skygear" {
     constructor(name: string);
   }
 
+  // NOTE(limouren): Node doesn't have Blob. Copy the type definition here to
+  // make tsc happy.
+  // https://github.com/Microsoft/TypeScript/blob/8794ebdff5c00a92bb197a5afba02d573681538e/src/lib/dom.generated.d.ts#L2233
+  interface Blob {
+    readonly size: number;
+    readonly type: string;
+    slice(start?: number, end?: number, contentType?: string): Blob;
+  }
+
   // NOTE(louis): I do not want to copy this but
   // in react native environment we cannot use --lib DOM
   // so File is undefined.
