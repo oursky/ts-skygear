@@ -127,11 +127,11 @@ declare module "skygear" {
 
   export class BaseContainer {
     makeRequest(action: string, data: any): Promise<any>;
+    endPoint: string;
+    apiKey: string;
   }
 
   export class Container extends BaseContainer {
-    endPoint: string;
-
     auth: AuthContainer;
     publicDB: Database;
     pubsub: PubsubContainer;
