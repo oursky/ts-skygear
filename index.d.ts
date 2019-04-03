@@ -364,6 +364,8 @@ declare module "skygear" {
       query: Query,
       cacheCallback?: boolean
     ): Promise<QueryResult<T>>;
+
+    uploadAsset(asset: Asset): Promise<Asset>;
   }
 
   interface DatabaseSaveOptions {
