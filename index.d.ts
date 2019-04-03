@@ -126,9 +126,12 @@ declare module "skygear" {
   }
 
   export class BaseContainer {
-    makeRequest(action: string, data: any): Promise<any>;
-    endPoint: string;
     apiKey: string;
+    endPoint: string;
+
+    config(options: { apiKey: string; endPoint: string }): Promise<BaseContainer>;
+    makeRequest(action: string, data: any): Promise<any>;
+    lambda(action: string, params: any): Promise<any>;
   }
 
   export class Container extends BaseContainer {
@@ -157,10 +160,6 @@ declare module "skygear" {
     DatabaseContainer: typeof DatabaseContainer;
     PubsubContainer: typeof PubsubContainer;
     PushContainer: typeof PushContainer;
-
-    config(options: { apiKey: string; endPoint: string }): Promise<Container>;
-
-    lambda(action: string, params: any): Promise<any>;
   }
 
   export class DatabaseContainer {
