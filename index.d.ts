@@ -135,12 +135,15 @@ declare module "skygear" {
   }
 
   export class BaseContainer {
+    apiKey: string;
+    endPoint: string;
+
+    config(options: { apiKey: string; endPoint: string }): Promise<BaseContainer>;
     makeRequest(action: string, data: any): Promise<any>;
+    lambda(action: string, params: any): Promise<any>;
   }
 
   export class Container extends BaseContainer {
-    endPoint: string;
-
     auth: AuthContainer;
     publicDB: Database;
     pubsub: PubsubContainer;
@@ -166,10 +169,6 @@ declare module "skygear" {
     DatabaseContainer: typeof DatabaseContainer;
     PubsubContainer: typeof PubsubContainer;
     PushContainer: typeof PushContainer;
-
-    config(options: { apiKey: string; endPoint: string }): Promise<Container>;
-
-    lambda(action: string, params: any): Promise<any>;
   }
 
   export class DatabaseContainer {
@@ -373,6 +372,8 @@ declare module "skygear" {
       query: Query,
       cacheCallback?: boolean
     ): Promise<QueryResult<T>>;
+
+    uploadAsset(asset: Asset): Promise<Asset>;
   }
 
   interface DatabaseSaveOptions {
