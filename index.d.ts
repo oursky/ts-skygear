@@ -62,6 +62,15 @@ declare module "skygear" {
     constructor(name: string);
   }
 
+  // NOTE(limouren): Node doesn't have Blob. Copy the type definition here to
+  // make tsc happy.
+  // https://github.com/Microsoft/TypeScript/blob/8794ebdff5c00a92bb197a5afba02d573681538e/src/lib/dom.generated.d.ts#L2233
+  interface Blob {
+    readonly size: number;
+    readonly type: string;
+    slice(start?: number, end?: number, contentType?: string): Blob;
+  }
+
   // NOTE(louis): I do not want to copy this but
   // in react native environment we cannot use --lib DOM
   // so File is undefined.
@@ -490,6 +499,9 @@ declare module "skygear" {
 }
 
 declare module "skygear/cloud" {
+  import { Fields, Files } from "formidable";
+  import { Url } from "url";
+
   export interface OpParams {
     action: string;
     args: Array<any>;
@@ -536,26 +548,82 @@ declare module "skygear/cloud" {
     options?: EventOptions
   ): void;
 
-  export interface handlerOptions {
+  export function handler(
+    path: string,
+    func: HandlerFunc,
+    options?: HandlerOptions
+  ): void;
+
+  export type HandlerFunc = (
+    req: SkygearRequest,
+    options: HandlerFunc.Options
+  ) => any;
+  export namespace HandlerFunc {
+    interface Options {
+      context: { [key: string]: any };
+      container: CloudCodeContainer;
+    }
+  }
+
+  export interface HandlerOptions {
     method?: string[] | string;
     keyRequired?: boolean;
     userRequired?: boolean;
   }
 
-  export type handlerReq = any;
+  export class SkygearRequest {
+    constructor(param: SkygearRequest.Param);
 
-  export type handlerFuncOptions = any;
+    header: { [key: string]: string };
+    method: string;
+    path: string;
+    queryString: string;
+    body: string;
+    url: Url;
 
-  export type handlerFunc = (
-    req: handlerReq,
-    options: handlerFuncOptions
-  ) => any;
+    query: string;
+    json: any;
 
-  export function handler(
-    path: string,
-    func: handlerFunc,
-    options?: handlerOptions
-  ): void;
+    form(callback: SkygearRequest.FormCallback): void;
+  }
+  export namespace SkygearRequest {
+    interface Param {
+      header: { [key: string]: string };
+      method: string;
+      path: string;
+      query_string: string;
+      body: string;
+      url: string;
+    }
+
+    // it is the callback from formidable parse
+    type FormCallback = (err: any, fields: Fields, files: Files) => any;
+  }
+
+  export class SkygearResponse {
+    constructor(options: SkygearResponse.Options);
+
+    setHeader(name: string, value: string): void;
+    getHeader(name: string): string | undefined;
+    removeHeader(name: string): void;
+
+    write(chunk: string): void;
+
+    toResultJSON(): { [key: string]: any };
+  }
+  export namespace SkygearResponse {
+    interface Options {
+      headers?: { [key: string]: string };
+      statusCode?: number;
+      body?: string;
+    }
+
+    interface ResultJSON {
+      header: { [key: string]: string };
+      status: number;
+      body: string;
+    }
+  }
 
   export type ProviderCls = Function;
 

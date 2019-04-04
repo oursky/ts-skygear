@@ -3,7 +3,13 @@
   "version": "0.4.0",
   "main": "index.js",
   "license": "Apache-2.0",
-  "files": ["index.d.ts"],
+  "files": [
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "@types/formidable": "*",
+    "@types/node": "*"
+  },
   "devDependencies": {
     "typescript": "2.9.2"
   },
