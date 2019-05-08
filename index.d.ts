@@ -614,7 +614,7 @@ declare module "skygear/cloud" {
   ): void;
 
   export type RecordOperationFunc = (
-    record: Record | undefined,
+    record: Record,
     originalRecord: Record | undefined,
     pool: Pool,
     options: any
