@@ -536,25 +536,25 @@ declare module "skygear/cloud" {
     options?: EventOptions
   ): void;
 
-  export interface handlerOptions {
+  export interface HandlerOptions {
     method?: string[] | string;
     keyRequired?: boolean;
     userRequired?: boolean;
   }
 
-  export type handlerReq = any;
+  export type HandlerReq = any;
 
-  export type handlerFuncOptions = any;
+  export type HandlerFuncOptions = any;
 
-  export type handlerFunc = (
-    req: handlerReq,
-    options: handlerFuncOptions
+  export type HandlerFunc = (
+    req: HandlerReq,
+    options: HandlerFuncOptions
   ) => any;
 
   export function handler(
     path: string,
-    func: handlerFunc,
-    options?: handlerOptions
+    func: HandlerFunc,
+    options?: HandlerOptions
   ): void;
 
   export type ProviderCls = Function;
