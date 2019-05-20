@@ -74,7 +74,7 @@ skygearCloud.beforeSave(
   "note",
   function(record, original, pool, options) {
     record.attributeKeys;
-    original.createdBy;
+    original && original.createdBy;
     return;
   },
   {
