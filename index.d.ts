@@ -674,6 +674,14 @@ declare module "skygear/cloud" {
     channels: string[],
     eventsData: any[]
   ): Promise<void>;
+
+  export class SkygearResponse {
+    constructor(options?: {
+      statusCode?: number;
+      body?: string;
+      headers?: { [header: string]: string };
+    });
+  }
 }
 
 declare module "skygear/react-native" {
